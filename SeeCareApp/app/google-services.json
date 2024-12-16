@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "99396577104",
+    "firebase_url": "https://phmonitoring-14d16-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "phmonitoring-14d16",
+    "storage_bucket": "phmonitoring-14d16.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99396577104:android:3110516207c0e272386e55",
+        "android_client_info": {
+          "package_name": "com.example.seecareapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQeJym1yvoPAwUyFRwHo1mTGahsNOcmFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
