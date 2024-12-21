@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.SeeCareApp" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="Theme.AppCompat" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

@@ -1,4 +1,5 @@
 package com.example.seecareapp;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,22 +24,22 @@ public class PHCircleView extends View {
     }
 
     private void init() {
-        // Khởi tạo paint cho vòng trònif
-//        if((float) phValue>=7.5) {
+        phValue = "0";
+        float ph = Float.parseFloat(phValue);
+        //Khởi tạo paint cho vòng trònif
+        if (ph >= 7.5) {
             circlePaint = new Paint();
             circlePaint.setColor(Color.rgb(255, 0, 0)); // Màu vòng tròn
             circlePaint.setStyle(Paint.Style.FILL);
-       // }
-//        else if(phValue<=6.5) {
-//            circlePaint = new Paint();
-//            circlePaint.setColor(Color.rgb(0, 0, 255)); // Màu vòng tròn
-//            circlePaint.setStyle(Paint.Style.FILL);
-//        }
-//        else {
-//            circlePaint = new Paint();
-//            circlePaint.setColor(Color.rgb(0, 255, 0)); // Màu vòng tròn
-//            circlePaint.setStyle(Paint.Style.FILL);
-//        }
+        } else if (ph <= 6.5) {
+            circlePaint = new Paint();
+            circlePaint.setColor(Color.rgb(0, 0, 255)); // Màu vòng tròn
+            circlePaint.setStyle(Paint.Style.FILL);
+        } else {
+            circlePaint = new Paint();
+            circlePaint.setColor(Color.rgb(0, 255, 0)); // Màu vòng tròn
+            circlePaint.setStyle(Paint.Style.FILL);
+        }
         // Khởi tạo paint cho văn bản
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE); // Màu chữ

@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     CardView btn_time;
     CardView btn_setting;
 
-
+CardView btnTest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 

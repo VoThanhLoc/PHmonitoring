@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
@@ -19,13 +22,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.OutputStream;
 
 public class TimeActivity extends AppCompatActivity {
     ImageButton btn_Back;
-    private LinearLayout timerLayout;
+    private TimePicker timePicker;
+    private EditText timeDisplay;
     private Button btnSetTimers;
-    private AlarmManager alarmManager;
+    private EditText txt_timerun;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,55 +56,70 @@ public class TimeActivity extends AppCompatActivity {
             }
         });
 
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        btnSetTimers = findViewById(R.id.btnSetTimers);
-        timerLayout = findViewById(R.id.timerLayout);
+        txt_timerun = findViewById(R.id.timerun);
 
-        Button btnSendData = findViewById(R.id.btnSendData);
-        Spinner spinnerHours1 = findViewById(R.id.spinnerHours1);
-        Spinner spinnerMinutes1 = findViewById(R.id.spinnerMinutes1);
-        Spinner spinnerSeconds1 = findViewById(R.id.spinnerSeconds1);
-        Switch deviceToggle1 = findViewById(R.id.deviceToggle1);
-        String[] hourValues = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
-        String[] minuteValues = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
-                "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-                "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-                "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
-                "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-                "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
-                "60"};
-        String[] secondValues = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
-                "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-                "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-                "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
-                "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-                "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
-                "60"};
+        // Ánh xạ TimePicker và EditText
+        timePicker = findViewById(R.id.oclock);
+        timeDisplay = findViewById(R.id.timeDisplay);
 
-// Tạo một ArrayAdapter và gán cho spinner
-        ArrayAdapter<String> adapterHour = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hourValues);
-        adapterHour.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Đặt chế độ 24h cho TimePicker
+        timePicker.setIs24HourView(true);
 
-        ArrayAdapter<String> minute = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, minuteValues);
-        minute.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<String> seconds = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, secondValues);
-        seconds.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-// Gán adapter cho các spinner.
-
-        spinnerHours1.setAdapter(adapterHour);
-        spinnerMinutes1.setAdapter(minute);
-        spinnerSeconds1.setAdapter(seconds);
-        btnSendData.setOnClickListener(new View.OnClickListener() {
+        // Lắng nghe sự kiện thay đổi thời gian
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
-            public void onClick(View v) {
-                int hour1 = Integer.parseInt(spinnerHours1.getSelectedItem().toString());
-                int minute1 = Integer.parseInt(spinnerMinutes1.getSelectedItem().toString());
-                int second1 = Integer.parseInt(spinnerSeconds1.getSelectedItem().toString());
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                // Tạo chuỗi thời gian từ giờ và phút
+                String time = String.format("%02d:%02d", hourOfDay, minute);
 
-                boolean isDeviceOn = deviceToggle1.isChecked();
-                String command = hour1 + ":" + minute1 + ":" + second1 + ":" + (isDeviceOn ? "ON" : "OFF");
+                // Hiển thị thời gian vào EditText
+                timeDisplay.setText(time);
             }
         });
+
+        btnSetTimers = findViewById(R.id.btnSetTimers);
+        btnSetTimers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendTimeToFirebase();
+            }
+        });
+    }
+
+    private void sendTimeToFirebase() {
+        // Lấy giờ và phút từ EditText
+        if(timeDisplay.getText().toString().isEmpty())
+        {
+            Toast.makeText(TimeActivity.this, "Vui lòng cài đặt thời gian bắt đầu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String time = timeDisplay.getText().toString();
+        String[] timeParts = time.split(":");  // Tách giờ và phút từ chuỗi "HH:mm"
+        int hour = Integer.parseInt(timeParts[0]);
+        int minute = Integer.parseInt(timeParts[1]);
+
+        // Lấy thời gian chạy từ EditText
+
+        // Kiểm tra nếu trường timerun trống
+        if (txt_timerun.getText().toString().isEmpty()) {
+            Toast.makeText(TimeActivity.this, "Vui lòng nhập thời gian chạy", Toast.LENGTH_SHORT).show();
+            return;  // Dừng việc gửi dữ liệu nếu timerun trống
+        }
+        int runTime = Integer.parseInt(txt_timerun.getText().toString());
+        // Tạo đối tượng PumpSchedule
+        PumpSchedule pumpSchedule = new PumpSchedule(hour, minute, runTime);
+        // Khởi tạo Firebase Database
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("pumpSchedule");
+        // Gửi dữ liệu lên Firebase
+        myRef.setValue(pumpSchedule)
+                .addOnSuccessListener(aVoid -> {
+                    // Thông báo thành công
+                    Toast.makeText(TimeActivity.this, "Dữ liệu đã được gửi lên Firebase!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    // Thông báo thất bại
+                    Toast.makeText(TimeActivity.this, "Gửi dữ liệu thất bại!", Toast.LENGTH_SHORT).show();
+                });
     }
 }

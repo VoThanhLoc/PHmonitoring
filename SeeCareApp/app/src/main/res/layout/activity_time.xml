@@ -41,45 +41,41 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="5">
-            <Spinner
-                android:id="@+id/spinnerHours1"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:maxHeight="50dp"/>
-            <Spinner
-                android:id="@+id/spinnerMinutes1"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:maxHeight="50dp"/>
-            <Spinner
-                android:id="@+id/spinnerSeconds1"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:maxHeight="50dp"/>
-            <Switch
-                android:id="@+id/deviceToggle1"
+            <EditText
+                android:id="@+id/timeDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tắt/Bật thiết bị" />
+                android:hint="Thời gian đã chọn"
+                android:focusable="false"
+                android:clickable="true" />
+            <EditText
+                android:id="@+id/timerun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Thời gian chạy"
+                android:inputType="number"
+               />
         </LinearLayout>
 
         <!-- Các hàng tiếp theo -->
         <!-- Lặp lại các LinearLayout cho hàng 2, 3,... -->
 
+        <TimePicker
+            android:id="@+id/oclock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner" />
         <Button
             android:id="@+id/btnSetTimers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đặt giờ bật/tắt thiết bị" />
 
-        <!-- Thêm Button để gửi dữ liệu đến Arduino -->
-        <Button
-            android:id="@+id/btnSendData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gửi lệnh đến Arduino" />
+<!--        &lt;!&ndash; Thêm Button để gửi dữ liệu đến Arduino &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/btnSendData"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Gửi lệnh đến Arduino" />-->
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

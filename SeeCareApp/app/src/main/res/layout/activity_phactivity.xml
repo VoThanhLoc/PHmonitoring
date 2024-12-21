@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_centerInParent="true"
         tools:ignore="MissingClass,MissingConstraints">
 
         <RelativeLayout
@@ -32,19 +33,17 @@
                 android:text="PH"
                 android:textSize="50dp" />
         </RelativeLayout>
-
-<!--        <com.example.seecareapp.CyclePH-->
-<!--            android:id="@+id/cyclePH"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_centerInParent="true"/>-->
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
         <com.example.seecareapp.PHCircleView
             android:padding="50dp"
             android:id="@+id/phCircleView"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="100dp"/></LinearLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
